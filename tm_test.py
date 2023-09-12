@@ -1,4 +1,4 @@
-import turing_machine as tm
+import tm as tm
 
 def main():
     tripleTapeTuringMachine = tm.TripleTapeTuringMachine("aaaaaa#bbbbbb")

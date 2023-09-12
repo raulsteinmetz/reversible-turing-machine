@@ -82,10 +82,10 @@ class TripleTapeTuringMachine:
         # input tape
         self.tape_one = Tape()
 
-        # second tape
+        # history tape
         self.tape_two = Tape()
 
-        # third tape
+        # output tape
         self.tape_three = Tape()
 
         # transitions
@@ -93,6 +93,7 @@ class TripleTapeTuringMachine:
 
         # initial state
         self.initial_state = 0
+
         # final state
         self.final_state = 0
 
@@ -130,13 +131,11 @@ class TripleTapeTuringMachine:
         
 
     def step(self):
-        # logic probably not working yet, thats just the general idea
-
 
         movement_transition = False
 
         # read tapes
-        first_tape_read = self.tape_one.action(TYPE_READ, '/') # the error is here, the trainsition needs to be '/'
+        first_tape_read = self.tape_one.action(TYPE_READ, '/')
         second_tape_read = self.tape_two.action(TYPE_READ, '/')
         third_tape_read = self.tape_three.action(TYPE_READ, '/')
 
