@@ -30,30 +30,23 @@ def convert(tm_5_file_path: str):
     transitions_5 = reformat_transitions_5(get_transitions_5(open_file(tm_5_file_path)))
     print(transitions_5)
     transitions_4 = []
+
     for t in transitions_5:
-        # the problem is that if a transition t1 can move to more then one direction, the index of the movement transition is repeated
-
-
-        # so falta fazer essa merda funcionar KKKK
         mvtr_index = int(t[0]) - 1 + len(transitions_5)
-        new = False
-        while not new:
-            new = True
-            for transition in transitions_4.copy():
-                if transition.current_state == mvtr_index:
-                    mvtr_index += 100
-                    new = False
-                    break
+        for transition in transitions_4:
+            if transition.current_state == mvtr_index:
+                mvtr_index += 100
 
-        
-        print(mvtr_index)
 
         transitions_4.append(Transition([t[1], '_', '_'], [t[3], '_', '_'], \
                                         [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], \
-                                            int(t[0]) - 1, int(t[0])  - 1 + len(transitions_5)))
+                                            int(t[0]) - 1, mvtr_index))
         transitions_4.append(Transition(['/', '/', '/'], ['/', '/', '/'], \
                                         [movements[t[4]], MOVEMENT_STAY, MOVEMENT_STAY], \
-                                        int(t[0]) - 1 + len(transitions_5), int(t[2]) - 1))
+                                        mvtr_index, int(t[2]) - 1))
+        
+    
+    transitions_4.pop()
 
     return transitions_4
 
@@ -68,14 +61,7 @@ def parse_tm(tm_5_file_path: str):
 
 def main():
     entry, transitions = parse_tm('input_ex1.txt')
-    print(entry)
-    i = 0
-    for t in transitions:
-        print(f'Transition {i}')
-        t.show()
-        print('\n\n')
-        i += 1
-
+    
 
 
 if __name__ == '__main__':
