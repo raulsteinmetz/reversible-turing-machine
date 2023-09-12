@@ -1,6 +1,7 @@
 import tm as tm
+from tm_54_converter import parse_tm
 
-def main():
+def test1():
     tripleTapeTuringMachine = tm.TripleTapeTuringMachine("aaaaaa#bbbbbb")
     tripleTapeTuringMachine.set_input_tape("aaaaaa#bbbbbb")
     tripleTapeTuringMachine.set_initial_state(0)
@@ -56,7 +57,21 @@ def main():
 
 
 
+def test2():
+    entry, transitions = parse_tm('input_ex1.txt')
+    tmn = tm.TripleTapeTuringMachine(entry)
+    tmn.set_input_tape(entry)
+    tmn.set_initial_state(0)
+    tmn.set_final_state(6)
 
+    for t in transitions:
+        tmn.add_transition(t)
+
+    if(tmn.run(print_tapes=True, print_transition=True)):
+        print("Accepted")
+    else:
+        print("Rejected")
 
 if __name__ == '__main__':
-    main()
+    # test1()
+    test2()

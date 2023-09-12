@@ -1,6 +1,6 @@
 # tape
 
-STANDART_HEAD_INDEX = 20
+STANDART_HEAD_INDEX = 5
 
 TYPE_READ = 0
 TYPE_WRITE = 1
@@ -10,7 +10,7 @@ MOVEMENT_LEFT = -1
 MOVEMENT_RIGHT = 1
 MOVEMENT_STAY = 0
 
-MAXIMUM_TAPE_SIZE = 100
+MAXIMUM_TAPE_SIZE = 25
 
 class Tape:
     def __init__(self):
@@ -76,6 +76,15 @@ class Transition:
         self.current_state = state
         self.next_state = next_state
 
+    def show(self):
+        print(f'First tape = {self.first_tape_read} {self.first_tape_write} {self.first_tape_movent}')
+        # print(f'Second tape = {self.second_tape_read} {self.second_tape_write} {self.second_tape_movent}')
+        # print(f'Third tape = {self.third_tape_read} {self.third_tape_write} {self.third_tape_movent}')
+
+        print(f'Current state = {self.current_state}')
+        print(f'Next state = {self.next_state}')
+
+
 
 class TripleTapeTuringMachine:
     def __init__(self, input_tape_string):
@@ -121,16 +130,16 @@ class TripleTapeTuringMachine:
         self.final_state = state
 
 
-    def run(self):
-        # yet to be implemented
-        while(self.step()):
+    def run(self, print_tapes=False, print_transition=False):
+        self.current_state = self.initial_state
+        while(self.step(print_tapes, print_transition)):
             if (self.current_state == self.final_state):
                 return True
             
         return False
         
 
-    def step(self):
+    def step(self, print_tapes, print_transition):
 
         movement_transition = False
 
@@ -167,15 +176,19 @@ class TripleTapeTuringMachine:
 
 
         # find next state
+        tmp = self.current_state
         self.current_state = transition.next_state
 
 
-        # tape one state
-        q = f' q{self.current_state} '
-        before_q = self.tape_one.content[:self.tape_one.head_index + 1]
-        after_q = self.tape_one.content[self.tape_one.head_index + 1:]
-        print(f'{before_q}({q}){after_q}', end='\n')
+        if print_tapes:
+            # tape one state
+            q = f' q{tmp} '
+            before_q = self.tape_one.content[:self.tape_one.head_index]
+            after_q = self.tape_one.content[self.tape_one.head_index:]
+            print(f'{before_q}({q}){after_q}', end='\n')
 
+        if print_transition:
+            transition.show()
         return True
     
     def convert_to_reversible(self):
