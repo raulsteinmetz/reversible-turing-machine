@@ -50,7 +50,7 @@ def test1():
     tripleTapeTuringMachine.add_transition(transition_20)
     
 
-    if(tripleTapeTuringMachine.run()):
+    if(tripleTapeTuringMachine.run(print_tapes=True, print_transition=True)):
         print("Accepted")
     else:
         print("Rejected")
@@ -62,7 +62,7 @@ def test2():
     tmn = tm.TripleTapeTuringMachine(entry)
     tmn.set_input_tape(entry)
     tmn.set_initial_state(0)
-    tmn.set_final_state(6)
+    tmn.set_final_state(5)
 
     for t in transitions:
         tmn.add_transition(t)

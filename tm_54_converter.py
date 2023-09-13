@@ -26,7 +26,7 @@ def reformat_transitions_5(transitions_5: list):
 
 
 def convert(tm_5_file_path: str):
-    # n faco ideia se ta funfando kkkk
+    # funciona mas quero retornar estado final - 1
     transitions_5 = reformat_transitions_5(get_transitions_5(open_file(tm_5_file_path)))
     print(transitions_5)
     transitions_4 = []
@@ -46,7 +46,7 @@ def convert(tm_5_file_path: str):
                                         mvtr_index, int(t[2]) - 1))
         
     
-    transitions_4.pop()
+    # transitions_4.pop()
 
     return transitions_4
 
@@ -60,7 +60,9 @@ def parse_tm(tm_5_file_path: str):
 
 
 def main():
-    entry, transitions = parse_tm('input_ex1.txt')
+    entry, transitions = parse_tm('./input_ex1.txt')
+    for t in transitions:
+        t.show()
     
 
 
