@@ -17,8 +17,6 @@ class ReversibleTuringMachine:
 
     def add_copying(self):
         self.tm.final_state = 'r0'
-        # last transition should have as next state the first state of the copying machine
-        # after that, just adding the coppying transictions should be enough
         self.tm.transitions[-1].next_state = 'c#'
         self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [MOVEMENT_LEFT, MOVEMENT_STAY, MOVEMENT_STAY], 'c#', 'c##', type_=STATE_INTERMEDIATE))
         self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [MOVEMENT_LEFT, MOVEMENT_STAY, MOVEMENT_STAY], 'c##', 'c0'))
@@ -34,6 +32,12 @@ class ReversibleTuringMachine:
         
 
         pass
+
+
+    def apply_conversion(self):
+        self.add_history()
+        self.add_copying()
+
 
     def run(self, print_tapes=False, print_transition=False):
         return self.tm.run(print_tapes, print_transition)

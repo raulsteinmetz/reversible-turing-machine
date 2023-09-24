@@ -30,9 +30,7 @@ def test1():
         tmn.add_transition(t)
 
     rtmn = ReversibleTuringMachine(tmn)
-    rtmn.add_history()
-    rtmn.add_copying()
-
+    rtmn.apply_conversion()
 
     if(rtmn.run(print_tapes=True, print_transition=False)):
         print("Accepted")
