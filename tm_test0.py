@@ -4,8 +4,8 @@ from rtm import ReversibleTuringMachine
 from tm_54_converter import parse_tm
 
 def test0():
-    entry, transitions = parse_tm('input_ex1.txt')
-    tmn = tm.TripleTapeTuringMachine(entry)
+    entry, transitions, _, alpha_tm = parse_tm('./input_ex1.txt')
+    tmn = tm.TripleTapeTuringMachine(entry, alphabet=alpha_tm)
     tmn.set_input_tape(entry)
     tmn.set_initial_state('q0')
     tmn.set_final_state('q5')
@@ -20,8 +20,8 @@ def test0():
 
 
 def test1():
-    entry, transitions = parse_tm('input_ex1.txt')
-    tmn = tm.TripleTapeTuringMachine(entry)
+    entry, transitions, _, alpha_tm = parse_tm('./input_ex1.txt')
+    tmn = tm.TripleTapeTuringMachine(entry, alphabet=alpha_tm)
     tmn.set_input_tape(entry)
     tmn.set_initial_state('q0')
     tmn.set_final_state('q5')
@@ -31,6 +31,7 @@ def test1():
 
     rtmn = ReversibleTuringMachine(tmn)
     rtmn.add_history()
+    rtmn.add_copying()
 
 
     if(rtmn.run(print_tapes=True, print_transition=False)):

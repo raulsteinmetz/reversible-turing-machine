@@ -29,7 +29,6 @@ def reformat_transitions_5(transitions_5: list):
 def convert(tm_5_file_path: str):
     # funciona mas quero retornar estado final - 1
     transitions_5 = reformat_transitions_5(get_transitions_5(open_file(tm_5_file_path)))
-    print(transitions_5)
     transitions_4 = []
 
     for t in transitions_5:
@@ -45,24 +44,34 @@ def convert(tm_5_file_path: str):
         transitions_4.append(Transition(['/', '/', '/'], ['/', '/', '/'], \
                                         [movements[t[4]], MOVEMENT_STAY, MOVEMENT_STAY], \
                                         'q' + str(mvtr_index), 'q' + str(int(t[2]) - 1), type_=STATE_INTERMEDIATE))
-        
-    transitions_4[-2].show()
+
 
     return transitions_4
 
 def get_entry(tm_5_file_path: str):
     with open(tm_5_file_path) as file:
         return list(file.readlines() [-1:][0])
+    
+def get_alphabet_tape(tm_5_file_path:str):
+    with open(tm_5_file_path) as file:
+        return file.readlines()[2]
+
+
+def get_alphabet_tm(tm_5_file_path:str):
+    with open(tm_5_file_path) as file:
+        return file.readlines()[3]
 
 def parse_tm(tm_5_file_path: str):
     return get_entry(tm_5_file_path), \
-        convert(tm_5_file_path)
+        convert(tm_5_file_path),\
+        get_alphabet_tape(tm_5_file_path),\
+        get_alphabet_tm(tm_5_file_path)
 
 
 def main():
-    entry, transitions = parse_tm('./input_ex1.txt')
-    for t in transitions:
-        t.show()
+    entry, transitions, alpha_tape, alpha_tm = parse_tm('./input_ex1.txt')
+    print(alpha_tape)
+    print(alpha_tm)
     
 
 
