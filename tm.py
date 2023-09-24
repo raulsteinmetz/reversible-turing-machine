@@ -91,13 +91,13 @@ class TripleTapeTuringMachine:
         self.transitions = []
 
         # initial state
-        self.initial_state = 0
+        self.initial_state = 'q1'
 
         # final state
-        self.final_state = 0
+        self.final_state = 'q1'
 
         # current state
-        self.current_state = 0
+        self.current_state = 'q1'
 
 
     def set_input_tape(self, input_tape_string):
@@ -175,13 +175,13 @@ class TripleTapeTuringMachine:
 
         if print_tapes:
             # tape one state
-            q = f' q{tmp} '
+            q = tmp
             before_q = self.tape_one.content[:self.tape_one.head_index]
             after_q = self.tape_one.content[self.tape_one.head_index:]
             print(f'{before_q}({q}){after_q}', end='\n')
 
             # tape two state
-            q = f' q{tmp} '
+            q = tmp
             before_q = self.tape_two.content[:self.tape_two.head_index]
             after_q = self.tape_two.content[self.tape_two.head_index:]
             print(f'{before_q}({q}){after_q}', end='\n')

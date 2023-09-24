@@ -9,7 +9,7 @@ class ReversibleTuringMachine:
     def add_history(self):
         for t in self.tm.transitions:  
             if t.type_ == STATE_EFFECTIVE:
-                t.second_tape_write = str(t.next_state)
+                t.second_tape_write = t.next_state
             elif t.type_ == STATE_INTERMEDIATE:
                 t.second_tape_move = MOVEMENT_RIGHT
 

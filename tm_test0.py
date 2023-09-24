@@ -7,8 +7,8 @@ def test0():
     entry, transitions = parse_tm('input_ex1.txt')
     tmn = tm.TripleTapeTuringMachine(entry)
     tmn.set_input_tape(entry)
-    tmn.set_initial_state(0)
-    tmn.set_final_state(5)
+    tmn.set_initial_state('q0')
+    tmn.set_final_state('q5')
 
     for t in transitions:
         tmn.add_transition(t)
@@ -23,8 +23,8 @@ def test1():
     entry, transitions = parse_tm('input_ex1.txt')
     tmn = tm.TripleTapeTuringMachine(entry)
     tmn.set_input_tape(entry)
-    tmn.set_initial_state(0)
-    tmn.set_final_state(5)
+    tmn.set_initial_state('q0')
+    tmn.set_final_state('q5')
 
     for t in transitions:
         tmn.add_transition(t)

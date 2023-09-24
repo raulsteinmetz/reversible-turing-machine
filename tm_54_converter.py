@@ -35,18 +35,18 @@ def convert(tm_5_file_path: str):
     for t in transitions_5:
         mvtr_index = int(t[0]) - 1 + len(transitions_5)
         for transition in transitions_4:
-            if transition.current_state == mvtr_index:
+            if int(transition.current_state[1:]) == mvtr_index or int(transition.next_state[1:]) == mvtr_index:
                 mvtr_index += 100
 
 
         transitions_4.append(Transition([t[1], '/', '/'], [t[3], '/', '/'], \
                                         [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], \
-                                            int(t[0]) - 1, mvtr_index, type_=STATE_EFFECTIVE))
+                                            'q' + str(int(t[0]) - 1), 'q' + str(mvtr_index), type_=STATE_EFFECTIVE))
         transitions_4.append(Transition(['/', '/', '/'], ['/', '/', '/'], \
                                         [movements[t[4]], MOVEMENT_STAY, MOVEMENT_STAY], \
-                                        mvtr_index, int(t[2]) - 1, type_=STATE_INTERMEDIATE))
+                                        'q' + str(mvtr_index), 'q' + str(int(t[2]) - 1), type_=STATE_INTERMEDIATE))
         
-    
+    transitions_4[-2].show()
 
     return transitions_4
 
