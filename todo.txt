@@ -1,0 +1,4 @@
+salvar transições da fita 2 - acho que sim
+usar states strings
+copiar fita 
+reverter

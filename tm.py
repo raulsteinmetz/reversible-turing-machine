@@ -12,6 +12,9 @@ MOVEMENT_STAY = 0
 
 MAXIMUM_TAPE_SIZE = 25
 
+STATE_EFFECTIVE = 0
+STATE_INTERMEDIATE = 1
+
 class Tape:
     def __init__(self):
         self.content = ['_'] * MAXIMUM_TAPE_SIZE
@@ -38,23 +41,7 @@ class Tape:
 
 # triple tape turing machine
 class Transition:
-    def __init__(self):
-        self.first_tape_read = '_'
-        self.second_tape_read = '_'
-        self.third_tape_read = '_'
-
-        self.first_tape_write = '_'
-        self.second_tape_write = '_'
-        self.third_tape_write = '_'
-
-        self.first_tape_movent = MOVEMENT_STAY
-        self.second_tape_movent = MOVEMENT_STAY
-        self.third_tape_movent = MOVEMENT_STAY
-
-        self.current_state = 0
-        self.next_state = 0
-
-    def __init__(self, reads, writes, movements, state, next_state):
+    def __init__(self, reads, writes, movements, state, next_state, type_ = STATE_EFFECTIVE):
 
         for i in range(3):
             if (movements[i] != MOVEMENT_STAY):
@@ -69,21 +56,24 @@ class Transition:
         self.second_tape_write = writes[1]
         self.third_tape_write = writes[2]
 
-        self.first_tape_movent = movements[0]
-        self.second_tape_movent = movements[1]
-        self.third_tape_movent = movements[2]
+        self.first_tape_move = movements[0]
+        self.second_tape_move = movements[1]
+        self.third_tape_move = movements[2]
 
         self.current_state = state
         self.next_state = next_state
 
+        self.type_ = type_
+
     def show(self):
-        print(f'First tape = {self.first_tape_read} {self.first_tape_write} {self.first_tape_movent}')
-        # print(f'Second tape = {self.second_tape_read} {self.second_tape_write} {self.second_tape_movent}')
-        # print(f'Third tape = {self.third_tape_read} {self.third_tape_write} {self.third_tape_movent}')
+        print(f'First tape = {self.first_tape_read} {self.first_tape_write} {self.first_tape_move}')
+        print(f'Second tape = {self.second_tape_read} {self.second_tape_write} {self.second_tape_move}')
+        print(f'Third tape = {self.third_tape_read} {self.third_tape_write} {self.third_tape_move}')
 
         print(f'Current state = {self.current_state}')
         print(f'Next state = {self.next_state}')
 
+        print(f'Type = {self.type_}')
 
 
 class TripleTapeTuringMachine:
@@ -155,7 +145,10 @@ class TripleTapeTuringMachine:
                 transition = i
                 movement_transition = True
                 break
-            elif(self.current_state == i.current_state and  i.first_tape_read == first_tape_read and i.second_tape_read == second_tape_read and i.third_tape_read == third_tape_read):
+            elif(self.current_state == i.current_state and\
+                    (i.first_tape_read == first_tape_read or i.first_tape_read == '/') and\
+                    (i.second_tape_read == second_tape_read or i.second_tape_read == '/') and\
+                    (i.third_tape_read == third_tape_read or i.third_tape_read == '/')):
                 transition = i
                 break
 
@@ -164,9 +157,9 @@ class TripleTapeTuringMachine:
 
         if (movement_transition):
             # move tapes
-            self.tape_one.action(TYPE_MOVE, transition.first_tape_movent)
-            self.tape_two.action(TYPE_MOVE, transition.second_tape_movent)
-            self.tape_three.action(TYPE_MOVE, transition.third_tape_movent)
+            self.tape_one.action(TYPE_MOVE, transition.first_tape_move)
+            self.tape_two.action(TYPE_MOVE, transition.second_tape_move)
+            self.tape_three.action(TYPE_MOVE, transition.third_tape_move)
 
         else:
             # write tapes
@@ -187,10 +180,19 @@ class TripleTapeTuringMachine:
             after_q = self.tape_one.content[self.tape_one.head_index:]
             print(f'{before_q}({q}){after_q}', end='\n')
 
+            # tape two state
+            q = f' q{tmp} '
+            before_q = self.tape_two.content[:self.tape_two.head_index]
+            after_q = self.tape_two.content[self.tape_two.head_index:]
+            print(f'{before_q}({q}){after_q}', end='\n')
+
+            print()
+
         if print_transition:
             transition.show()
         return True
     
-    def convert_to_reversible(self):
-        pass
+
+
+
     

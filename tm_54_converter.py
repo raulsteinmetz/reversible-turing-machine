@@ -1,5 +1,6 @@
 from collections import deque
-from tm import Transition, MOVEMENT_STAY, MOVEMENT_LEFT, MOVEMENT_RIGHT
+from tm import Transition, MOVEMENT_STAY, MOVEMENT_LEFT, MOVEMENT_RIGHT,\
+                STATE_EFFECTIVE, STATE_INTERMEDIATE
 
 movements = {'R': MOVEMENT_RIGHT, 'L': MOVEMENT_LEFT, 'S': MOVEMENT_STAY}
 
@@ -38,15 +39,14 @@ def convert(tm_5_file_path: str):
                 mvtr_index += 100
 
 
-        transitions_4.append(Transition([t[1], '_', '_'], [t[3], '_', '_'], \
+        transitions_4.append(Transition([t[1], '/', '/'], [t[3], '/', '/'], \
                                         [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], \
-                                            int(t[0]) - 1, mvtr_index))
+                                            int(t[0]) - 1, mvtr_index, type_=STATE_EFFECTIVE))
         transitions_4.append(Transition(['/', '/', '/'], ['/', '/', '/'], \
                                         [movements[t[4]], MOVEMENT_STAY, MOVEMENT_STAY], \
-                                        mvtr_index, int(t[2]) - 1))
+                                        mvtr_index, int(t[2]) - 1, type_=STATE_INTERMEDIATE))
         
     
-    # transitions_4.pop()
 
     return transitions_4
 
