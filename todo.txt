@@ -1,4 +1,2 @@
 salvar transições da fita 2 - acho que sim
-capturar outras infos do input
-copiar fita 
 reverter

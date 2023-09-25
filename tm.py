@@ -131,6 +131,28 @@ class TripleTapeTuringMachine:
                 return True
             
         return False
+    
+    def print_tapes(self, tmp , t1_idx, t2_idx, t3_idx):
+            # tape one state
+            print()
+            q = tmp
+            before_q = self.tape_one.content[:t1_idx]
+            after_q = self.tape_one.content[self.tape_one.head_index:]
+            print(f'T1 = {before_q}({q}){after_q}', end='\n')
+
+            # tape two state
+            q = tmp
+            before_q = self.tape_two.content[:t2_idx]
+            after_q = self.tape_two.content[self.tape_two.head_index:]
+            print(f'T2 = {before_q}({q}){after_q}', end='\n')
+
+            # tape three state
+            q = tmp
+            before_q = self.tape_three.content[:t3_idx]
+            after_q = self.tape_three.content[self.tape_three.head_index:]
+            print(f'T3 = {before_q}({q}){after_q}', end='\n')
+
+            print('\n')
         
 
     def step(self, print_tapes, print_transition):
@@ -158,6 +180,12 @@ class TripleTapeTuringMachine:
 
         if(transition == None):
             return False
+        
+
+        # for printing
+        t1_idx = self.tape_one.head_index
+        t2_idx = self.tape_two.head_index
+        t3_idx = self.tape_three.head_index
 
         if (movement_transition):
             # move tapes
@@ -174,32 +202,13 @@ class TripleTapeTuringMachine:
             if transition.third_tape_write != '/':
                 self.tape_three.action(TYPE_WRITE, transition.third_tape_write)
 
-
         # find next state
         tmp = self.current_state
         self.current_state = transition.next_state
 
 
         if print_tapes:
-            # tape one state
-            q = tmp
-            before_q = self.tape_one.content[:self.tape_one.head_index]
-            after_q = self.tape_one.content[self.tape_one.head_index:]
-            print(f'T1 = {before_q}({q}){after_q}', end='\n')
-
-            # tape two state
-            q = tmp
-            before_q = self.tape_two.content[:self.tape_two.head_index]
-            after_q = self.tape_two.content[self.tape_two.head_index:]
-            print(f'T2 = {before_q}({q}){after_q}', end='\n')
-
-            # tape three state
-            q = tmp
-            before_q = self.tape_three.content[:self.tape_three.head_index]
-            after_q = self.tape_three.content[self.tape_three.head_index:]
-            print(f'T3 = {before_q}({q}){after_q}', end='\n')
-
-            print('\n\n')
+            self.print_tapes(tmp, t1_idx, t2_idx, t3_idx)
 
         if print_transition:
             transition.show()

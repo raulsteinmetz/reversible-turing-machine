@@ -24,7 +24,6 @@ def test1():
     tmn = tm.TripleTapeTuringMachine(entry, alphabet=alpha_tm)
     tmn.set_input_tape(entry)
     tmn.set_initial_state('q0')
-    tmn.set_final_state('q5')
 
     for t in transitions:
         tmn.add_transition(t)
@@ -32,10 +31,19 @@ def test1():
     rtmn = ReversibleTuringMachine(tmn)
     rtmn.apply_conversion()
 
-    if(rtmn.run(print_tapes=True, print_transition=False)):
+    for t in rtmn.tm.transitions:
+        if t.current_state == 'r50' or t.current_state == 'r51':
+            t.show()
+            print()
+
+    if(rtmn.run(print_tapes=True, print_transition=True)):
         print("Accepted")
     else:
         print("Rejected")
+
+    print('FINAL TAPES')
+    rtmn.tm.print_tapes(rtmn.tm.current_state, rtmn.tm.tape_one.head_index, rtmn.tm.tape_two.head_index, rtmn.tm.tape_three.head_index)
+    print('FINAL STATE: ' + rtmn.tm.current_state)
 
 if __name__ == '__main__':
     test1()
