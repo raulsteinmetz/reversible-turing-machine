@@ -31,10 +31,6 @@ def test1():
     rtmn = ReversibleTuringMachine(tmn)
     rtmn.apply_conversion()
 
-    for t in rtmn.tm.transitions:
-        if t.current_state == 'r50' or t.current_state == 'r51':
-            t.show()
-            print()
 
     if(rtmn.run(print_tapes=True, print_transition=True)):
         print("Accepted")

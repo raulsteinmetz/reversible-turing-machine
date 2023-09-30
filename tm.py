@@ -179,6 +179,16 @@ class TripleTapeTuringMachine:
                 break
 
         if(transition == None):
+            for t in self.transitions:
+                if t.current_state == self.current_state:
+                    print('\nWAS EXPECTING:')
+                    t.show()
+                    print('\nFOUND:')
+                    print(f'First tape: {first_tape_read}')
+                    print(f'Second tape {second_tape_read}')
+                    print(f'Third tape {third_tape_read}')
+                    print()
+
             return False
         
 

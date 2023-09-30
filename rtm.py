@@ -7,6 +7,7 @@ from tm import Transition, TripleTapeTuringMachine,\
 class ReversibleTuringMachine:
     def __init__(self, tm:TripleTapeTuringMachine):
         self.tm = tm
+        self.original_transitions = tm.transitions.copy()
 
     def add_history(self):
         for t in self.tm.transitions:  
@@ -16,7 +17,7 @@ class ReversibleTuringMachine:
                 t.second_tape_move = MOVEMENT_RIGHT
 
     def add_copying(self):
-        self.tm.final_state = 'r10'
+        self.tm.final_state = '#'
         self.tm.transitions[-1].next_state = 'c#'
         self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [MOVEMENT_LEFT, MOVEMENT_STAY, MOVEMENT_STAY], 'c#', 'c##', type_=STATE_INTERMEDIATE))
         self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [MOVEMENT_LEFT, MOVEMENT_STAY, MOVEMENT_STAY], 'c##', 'c0'))
@@ -28,47 +29,43 @@ class ReversibleTuringMachine:
         for alpha in self.tm.alphabet:
             self.tm.add_transition(Transition([alpha, '/', '/'], ['/', '/', alpha], [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], 'c3', 'c4'))
         self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [MOVEMENT_RIGHT, MOVEMENT_STAY, MOVEMENT_RIGHT], 'c4', 'c3', type_=STATE_INTERMEDIATE))
-        self.tm.add_transition(Transition(['_', '/', '/'], ['/', '/', '/'], [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], 'c3', 'r0'))
+        self.tm.add_transition(Transition(['_', '/', '/'], ['/', '/', '/'], [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], 'c3', 'r#'))
         
     def add_reversing(self):
-        # go left
-        self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [MOVEMENT_STAY, MOVEMENT_LEFT, MOVEMENT_STAY], 'r0', 'r1', type_=STATE_INTERMEDIATE))
-        r_idx = 1
-        old_t = self.tm.transitions.copy()
-        for ti in old_t:
-            if ti.type_ == STATE_INTERMEDIATE and 'c' not in ti.current_state and 'r' not in ti.current_state:
-                # find out the effective state that leads to it
-                te = None
-                for te_ in self.tm.transitions:
-                    if te_.next_state == ti.current_state:
-                        te = te_
-                        break
-                if te is None:
-                    raise Exception("Invalid transition")
+        r_itr = 0
+        self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [MOVEMENT_RIGHT, MOVEMENT_STAY, MOVEMENT_STAY], 'r#', 'r##', STATE_INTERMEDIATE))
+        self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [MOVEMENT_STAY, MOVEMENT_LEFT, MOVEMENT_STAY], 'r##', 'r###', STATE_INTERMEDIATE))
+
+        for transition in self.original_transitions[::-1]:
+            if transition.type_ == STATE_INTERMEDIATE:
+                # r0 -> reverse
+                self.tm.add_transition(Transition(['/', transition.current_state, '/'],
+                                                   ['/', '/', '/'], [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], 'r###', f'r{r_itr}', STATE_INTERMEDIATE))
+
+                # reverse movement in tape one
+                self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'],
+                                                   [-transition.first_tape_move, MOVEMENT_STAY, MOVEMENT_STAY],
+                                                     'r' + str(r_itr), 'r' + str(r_itr + 1), type_=STATE_INTERMEDIATE))
                 
-                self.tm.add_transition(Transition(['/', ti.current_state, '/'], ['/', '_', '/'], [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], 'r1', 'r' + str(r_idx + 1)))
-
-                # reversion + erase history
-                read1 = te.first_tape_write
-                write1 = te.first_tape_read
-                move = MOVEMENT_LEFT
-                if (ti.first_tape_move == MOVEMENT_LEFT):
-                    move = MOVEMENT_RIGHT
-
-                self.tm.add_transition(Transition([read1, '/', '/'], [write1, '/', '/'], [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], 'r' + str(r_idx + 1), 'r' + str(r_idx + 2), type_=STATE_EFFECTIVE))
-                self.tm.add_transition(Transition(['/', '/', '/'], ['/', '/', '/'], [move, MOVEMENT_LEFT, MOVEMENT_STAY], 'r' + str(r_idx + 2), 'r1', type_=STATE_INTERMEDIATE))
-
-
-                r_idx += 3
-
-        self.tm.add_transition(Transition(['/', '_', '/'], ['/', '/', '/'], [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], 'r1', 'f'))
-        self.tm.final_state = 'f'
+                # undo transition
+                for effective in self.original_transitions:
+                    if effective.next_state == transition.current_state:
+                        # print(effective.current_state, transition.current_state)
+                        self.tm.add_transition(Transition([effective.first_tape_write, effective.second_tape_write, '/'],
+                                               [effective.first_tape_read, '_', '/'],
+                                               [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], f'r{r_itr + 1}', f'r##', type_=STATE_EFFECTIVE))
+                        
+                        break
+                
+                r_itr += 2
+        pass
 
 
     def apply_conversion(self):
         self.add_history()
         self.add_copying()
         self.add_reversing()
+
 
 
     def run(self, print_tapes=False, print_transition=False):
