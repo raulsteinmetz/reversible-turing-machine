@@ -58,7 +58,8 @@ class ReversibleTuringMachine:
                         break
                 
                 r_itr += 2
-        pass
+        self.tm.add_transition(Transition(['/', '_', '/' ], ['/', '/', '/' ], [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], 'r###', 'final'))
+        self.tm.set_final_state('final')
 
 
     def apply_conversion(self):
