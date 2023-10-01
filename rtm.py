@@ -71,3 +71,4 @@ class ReversibleTuringMachine:
 
     def run(self, print_tapes=False, print_transition=False):
         return self.tm.run(print_tapes, print_transition)
+    

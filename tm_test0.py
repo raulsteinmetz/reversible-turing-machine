@@ -20,7 +20,7 @@ def test0():
 
 
 def test1():
-    entry, transitions, _, alpha_tm = parse_tm('./input_ex1.txt')
+    entry, transitions, _, alpha_tm = parse_tm('./input_ex2.txt')
     tmn = tm.TripleTapeTuringMachine(entry, alphabet=alpha_tm)
     tmn.set_input_tape(entry)
     tmn.set_initial_state('q0')
