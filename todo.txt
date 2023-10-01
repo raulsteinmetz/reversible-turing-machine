@@ -1,6 +1,0 @@
-salvar transições da fita 2 - acho que sim
-reverter
-
-
-
-acho que o erro esta em r1 ler _ no começo da fita e acabar

@@ -66,14 +66,3 @@ def parse_tm(tm_5_file_path: str):
         convert(tm_5_file_path),\
         get_alphabet_tape(tm_5_file_path),\
         get_alphabet_tm(tm_5_file_path)
-
-
-def main():
-    entry, transitions, alpha_tape, alpha_tm = parse_tm('./input_ex1.txt')
-    print(alpha_tape)
-    print(alpha_tm)
-    
-
-
-if __name__ == '__main__':
-    main()

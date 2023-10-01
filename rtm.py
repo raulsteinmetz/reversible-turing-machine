@@ -50,7 +50,6 @@ class ReversibleTuringMachine:
                 # undo transition
                 for effective in self.original_transitions:
                     if effective.next_state == transition.current_state:
-                        # print(effective.current_state, transition.current_state)
                         self.tm.add_transition(Transition([effective.first_tape_write, effective.second_tape_write, '/'],
                                                [effective.first_tape_read, '_', '/'],
                                                [MOVEMENT_STAY, MOVEMENT_STAY, MOVEMENT_STAY], f'r{r_itr + 1}', f'r##', type_=STATE_EFFECTIVE))

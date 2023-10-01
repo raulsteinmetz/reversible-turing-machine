@@ -101,7 +101,6 @@ class TripleTapeTuringMachine:
 
         # alphabet
         self.alphabet = alphabet.replace('\n', '').split(' ')
-        print(self.alphabet)
 
 
     def set_input_tape(self, input_tape_string):
